@@ -7,11 +7,67 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Jeopardy</title>
   <link href="https://fonts.googleapis.com/css?family=Copse&display=swap"
-        rel="stylesheet">
+        rel="stylesheet">        
   <link rel="stylesheet" href="jeopardy.css">
 </head>
 <body>
+      <h1>Jeopardy!</h1>
+      <button onClick="window.location.reload();">Start!</button>
 
+<table class="board">
+      <tr class="category">
+            <td id="Cat1">Category1</td>
+            <td id="Cat2">Category2</td>
+            <td id="Cat3">Category3</td>
+            <td id="Cat4">Category4</td>
+            <td id="Cat5">Category5</td>
+            <td id="Cat6">Category6</td>
+      </tr>
+      <tr class="$100">
+            <td class="available question" id="Q1Cat1">$100</td>
+            <td class="available question" id="Q1Cat2">$100</td>
+            <td class="available question" id="Q1Cat3">$100</td>
+            <td class="available question" id="Q1Cat4">$100</td>
+            <td class="available question" id="Q1Cat5">$100</td>
+            <td class="available question" id="Q1Cat6">$100</td>
+      </tr>
+      </tr>
+      <tr class="$200">
+            <td class="available question" id="Q2Cat1">$200</td>
+            <td class="available question" id="Q2Cat2">$200</td>
+            <td class="available question" id="Q2Cat3">$200</td>
+            <td class="available question" id="Q2Cat4">$200</td>
+            <td class="available question" id="Q2Cat5">$200</td>
+            <td class="available question" id="Q2Cat6">$200</td>
+      </tr>
+      </tr>
+      <tr class="$300">
+            <td class="available question" id="Q3Cat1">$300</td>
+            <td class="available question" id="Q3Cat2">$300</td>
+            <td class="available question" id="Q3Cat3">$300</td>
+            <td class="available question" id="Q3Cat4">$300</td>
+            <td class="available question" id="Q3Cat5">$300</td>
+            <td class="available question" id="Q3Cat6">$300</td>
+      </tr>
+      </tr>
+      <tr class="$400">
+            <td class="available question" id="Q4Cat1">$400</td>
+            <td class="available question" id="Q4Cat2">$400</td>
+            <td class="available question" id="Q4Cat3">$400</td>
+            <td class="available question" id="Q4Cat4">$400</td>
+            <td class="available question" id="Q4Cat5">$400</td>
+            <td class="available question" id="Q4Cat6">$400</td>
+      </tr>
+      <tr class="$500">
+            <td class="available question" id="Q5Cat1">$500</td>
+            <td class="available question" id="Q5Cat2">$500</td>
+            <td class="available question" id="Q5Cat3">$500</td>
+            <td class="available question" id="Q5Cat4">$500</td>
+            <td class="available question" id="Q5Cat5">$500</td>
+            <td class="available question" id="Q5Cat6">$500</td>
+      </tr>
+
+</table>
 <script src="https://unpkg.com/jquery"></script>
 <script src="https://unpkg.com/axios/dist/axios.js"></script>
 <script src="https://unpkg.com/lodash"></script>

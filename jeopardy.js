@@ -1,3 +1,4 @@
+
 // categories is the main data structure for the app; it looks like this:
 
 //  [
@@ -17,17 +18,22 @@
 //    },
 //    ...
 //  ]
+let categories = []
 
-let categories = [];
 
 
 /** Get NUM_CATEGORIES random category from API.
  *
  * Returns array of category ids
  */
+    async function getCategoryIds() {
+        const response = await fetch("http://jservice.io/api/random");
+        const data = await response.json();
+        let catId = data[0].question;
+        console.log(catId)
+    }
+    
 
-function getCategoryIds() {
-}
 
 /** Return object with data about a category:
  *
@@ -55,6 +61,11 @@ function getCategory(catId) {
 async function fillTable() {
 }
 
+const board = document.querySelector(".board")
+
+board.addEventListener("click", handleClick)
+
+
 /** Handle clicking on a clue: show the question or answer.
  *
  * Uses .showing property on clue to determine what to show:
@@ -62,13 +73,20 @@ async function fillTable() {
  * - if currently "question", show answer & set .showing to "answer"
  * - if currently "answer", ignore click
  * */
-
 function handleClick(evt) {
+    if (evt.target.classList.contains("available") ) {
+    //     evt.target.innerText = "question"    }
+    // else if (evt.target.innerText === "question") {
+    //     evt.target.innerText = "answer"}
+    // else if (evt.target.innerText === "answer") {
+        evt.target.classList.replace("available","notavailable")}
+    console.log(evt.target.classList)
 }
 
 /** Wipe the current Jeopardy board, show the loading spinner,
  * and update the button used to fetch data.
  */
+
 
 function showLoadingView() {
 
@@ -96,3 +114,5 @@ async function setupAndStart() {
 /** On page load, add event handler for clicking clues */
 
 // TODO
+
+
