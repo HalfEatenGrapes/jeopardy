@@ -29,7 +29,8 @@ let categories = []
     async function getCategoryIds() {
         const response = await fetch("http://jservice.io/api/random");
         const data = await response.json();
-        let catId = data[0].question;
+        let catId = data[0].category.title;
+        console.log(data[0].category)
         console.log(catId)
     }
     
