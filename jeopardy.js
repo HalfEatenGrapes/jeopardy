@@ -1,4 +1,3 @@
-
 // categories is the main data structure for the app; it looks like this:
 
 //  [
@@ -18,23 +17,23 @@
 //    },
 //    ...
 //  ]
-let categories = []
-
-
+let categories = [];
 
 /** Get NUM_CATEGORIES random category from API.
  *
  * Returns array of category ids
  */
-    async function getCategoryIds() {
-        const response = await fetch("http://jservice.io/api/random");
-        const data = await response.json();
-        let catId = data[0].category.title;
-        console.log(data[0].category)
-        console.log(catId)
-    }
-    
+const catIds = [];
 
+async function getCategoryIds() {
+  for (let i = 0; i < 6; i++) {
+    const response = await fetch("http://jservice.io/api/random");
+    const data = await response.json();
+    catIds.push(data[0].category.id);
+  }
+  console.log(catIds, "catIds in getCategoryIds");
+  return catIds;
+}
 
 /** Return object with data about a category:
  *
@@ -48,7 +47,27 @@ let categories = []
  *   ]
  */
 
-function getCategory(catId) {
+let category = {};
+let clues = [];
+
+async function getCategory(catIds) {
+  for (let i = 0; i < 6; i++) {
+    const response = await fetch("http://jservice.io/api/clues");
+    const data = await response.json();
+    console.log(data[0].category_id, "data in getCategory");
+    console.log(catIds[i], "catIds in getCategory");
+  }
+  //     if (data[0].category_id == catIds[i]) {
+  //       let category = {
+  //         title: data[0].category.title,
+  //         clues: [
+  //           { question: data[0].answer, answer: data[0].question, showing: null },
+  //         ],
+  //       };
+  //       return category;
+  //     }
+  //   }
+  //   console.log(category);
 }
 
 /** Fill the HTML table#jeopardy with the categories & cells for questions.
@@ -59,13 +78,11 @@ function getCategory(catId) {
  *   (initally, just show a "?" where the question/answer would go.)
  */
 
-async function fillTable() {
-}
+async function fillTable() {}
 
-const board = document.querySelector(".board")
+const board = document.querySelector(".board");
 
-board.addEventListener("click", handleClick)
-
+board.addEventListener("click", handleClick);
 
 /** Handle clicking on a clue: show the question or answer.
  *
@@ -75,28 +92,25 @@ board.addEventListener("click", handleClick)
  * - if currently "answer", ignore click
  * */
 function handleClick(evt) {
-    if (evt.target.classList.contains("available") ) {
+  if (evt.target.classList.contains("available")) {
     //     evt.target.innerText = "question"    }
     // else if (evt.target.innerText === "question") {
     //     evt.target.innerText = "answer"}
     // else if (evt.target.innerText === "answer") {
-        evt.target.classList.replace("available","notavailable")}
-    console.log(evt.target.classList)
+    evt.target.classList.replace("available", "notavailable");
+  }
+  console.log(evt.target.classList);
 }
 
 /** Wipe the current Jeopardy board, show the loading spinner,
  * and update the button used to fetch data.
  */
 
-
-function showLoadingView() {
-
-}
+function showLoadingView() {}
 
 /** Remove the loading spinner and update the button used to fetch data. */
 
-function hideLoadingView() {
-}
+function hideLoadingView() {}
 
 /** Start game:
  *
@@ -105,8 +119,7 @@ function hideLoadingView() {
  * - create HTML table
  * */
 
-async function setupAndStart() {
-}
+async function setupAndStart() {}
 
 /** On click of start / restart button, set up game. */
 
@@ -115,6 +128,3 @@ async function setupAndStart() {
 /** On page load, add event handler for clicking clues */
 
 // TODO
-
-
-// testing
