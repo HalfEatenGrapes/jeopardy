@@ -23,15 +23,15 @@ let categories = [];
  *
  * Returns array of category ids
  */
-const catIds = [];
 
 async function getCategoryIds() {
+  const catIds = [];
   for (let i = 0; i < 6; i++) {
     const response = await fetch("http://jservice.io/api/random");
     const data = await response.json();
-    catIds.push(data[0].category.id);
+    let catId = data[0].category.id;
+    catIds.push(catId);
   }
-  console.log(catIds, "catIds in getCategoryIds");
   return catIds;
 }
 
@@ -46,28 +46,28 @@ async function getCategoryIds() {
  *      ...
  *   ]
  */
+let answers = [];
+let questions = [];
 
-let category = {};
-let clues = [];
-
-async function getCategory(catIds) {
-  for (let i = 0; i < 6; i++) {
-    const response = await fetch("http://jservice.io/api/clues");
+async function getCategory() {
+  const catIds = await getCategoryIds();
+  for (let cat of catIds) {
+    const response = await fetch(`http://jservice.io/api/category?id=${cat}`);
     const data = await response.json();
-    console.log(data[0].category_id, "data in getCategory");
-    console.log(catIds[i], "catIds in getCategory");
+    // console.log(data);
+    let category = data.title;
+    categories.push(category);
+    for (let i = 0; i < 6; i++) {
+      let question = data.clues[i].answer;
+      questions.push(question);
+      let answer = data.clues[i].question;
+      answers.push(answer);
+    }
+    console.log(questions, "qs");
+    console.log(answers, "as");
   }
-  //     if (data[0].category_id == catIds[i]) {
-  //       let category = {
-  //         title: data[0].category.title,
-  //         clues: [
-  //           { question: data[0].answer, answer: data[0].question, showing: null },
-  //         ],
-  //       };
-  //       return category;
-  //     }
-  //   }
-  //   console.log(category);
+  console.log(categories, "cats");
+  return categories;
 }
 
 /** Fill the HTML table#jeopardy with the categories & cells for questions.
@@ -77,8 +77,23 @@ async function getCategory(catIds) {
  *   each with a question for each category in a <td>
  *   (initally, just show a "?" where the question/answer would go.)
  */
+const question2 = document.getElementsByClassName("200");
+const question4 = document.getElementsByClassName("400");
+const question6 = document.getElementsByClassName("600");
+const question8 = document.getElementsByClassName("800");
+const question10 = document.getElementsByClassName("1000");
+const allQuestions = document.getElementsByClassName("question");
+const category = document.getElementsByClassName("cat");
 
-async function fillTable() {}
+async function fillTable() {
+  await getCategory();
+  for (let i = 0; i < categories.length; i++) {
+    category[i].innerHTML = category[i];
+  }
+  for (let i = 0; i < questions.length; i++) {
+    allQuestions[i].innerHTML = allQuestions[i];
+  }
+}
 
 const board = document.querySelector(".board");
 
@@ -93,10 +108,10 @@ board.addEventListener("click", handleClick);
  * */
 function handleClick(evt) {
   if (evt.target.classList.contains("available")) {
-    //     evt.target.innerText = "question"    }
-    // else if (evt.target.innerText === "question") {
-    //     evt.target.innerText = "answer"}
-    // else if (evt.target.innerText === "answer") {
+    //   evt.target.innerText = question;
+    // } else if (evt.target.innerText === question) {
+    //   evt.target.innerText = answer;
+    // } else if (evt.target.innerText === answer) {
     evt.target.classList.replace("available", "notavailable");
   }
   console.log(evt.target.classList);
