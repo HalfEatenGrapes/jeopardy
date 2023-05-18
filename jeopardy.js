@@ -54,19 +54,20 @@ async function getCategory() {
   for (let cat of catIds) {
     const response = await fetch(`http://jservice.io/api/category?id=${cat}`);
     const data = await response.json();
-    // console.log(data);
+    // console.log(data.clues);
     let category = data.title;
     categories.push(category);
     for (let i = 0; i < 6; i++) {
       let question = data.clues[i].answer;
       questions.push(question);
-      let answer = data.clues[i].question;
-      answers.push(answer);
-    }
-    console.log(questions, "qs");
-    console.log(answers, "as");
+    //   let answer = data.clues[i].question;
+    //   answers.push(answer);
+    // }
+    console.log(questions, "qs during");
+    // console.log(answers, "as");
   }
-  console.log(categories, "cats");
+  // console.log(categories, "cats");
+  console.log(questions, "qs after");
   return categories;
 }
 
@@ -90,9 +91,9 @@ async function fillTable() {
   for (let i = 0; i < categories.length; i++) {
     category[i].innerHTML = category[i];
   }
-  for (let i = 0; i < questions.length; i++) {
-    allQuestions[i].innerHTML = allQuestions[i];
-  }
+  // for (let i = 0; i < questions.length; i++) {
+  //   allQuestions[i].innerHTML = allQuestions[i];
+  // }
 }
 
 const board = document.querySelector(".board");
