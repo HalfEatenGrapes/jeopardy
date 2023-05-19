@@ -54,7 +54,7 @@ async function getCategory() {
   for (let cat of catIds) {
     const response = await fetch(`http://jservice.io/api/category?id=${cat}`);
     const data = await response.json();
-    // console.log(data.clues);
+
     let category = data.title;
     categories.push(category);
     for (let i = 0; i < 6; i++) {
@@ -63,14 +63,10 @@ async function getCategory() {
       }
       let question = data.clues[i].answer;
       questions.push(question);
-    //   let answer = data.clues[i].question;
-    //   answers.push(answer);
-    // }
-    console.log(questions, "qs during");
-    // console.log(answers, "as");
+      let answer = data.clues[i].question;
+      answers.push(answer);
+    }
   }
-  // console.log(categories, "cats");
-  console.log(questions, "qs after");
   return categories;
 }
 
@@ -92,11 +88,11 @@ const category = document.getElementsByClassName("cat");
 async function fillTable() {
   await getCategory();
   for (let i = 0; i < categories.length; i++) {
-    category[i].innerHTML = category[i];
+    category[i].innerHTML = categories[i];
   }
-  // for (let i = 0; i < questions.length; i++) {
-  //   allQuestions[i].innerHTML = allQuestions[i];
-  // }
+  for (let i = 0; i < questions.length; i++) {
+    allQuestions[i].innerHTML = questions[i];
+  }
 }
 
 const board = document.querySelector(".board");
@@ -112,10 +108,10 @@ board.addEventListener("click", handleClick);
  * */
 function handleClick(evt) {
   if (evt.target.classList.contains("available")) {
-    //   evt.target.innerText = question;
-    // } else if (evt.target.innerText === question) {
-    //   evt.target.innerText = answer;
-    // } else if (evt.target.innerText === answer) {
+    evt.target.innerText = question;
+  } else if (evt.target.classList.contains("question")) {
+    evt.target.innerText = answer;
+  } else if (evt.target.classList.contains("answer")) {
     evt.target.classList.replace("available", "notavailable");
   }
   console.log(evt.target.classList);
