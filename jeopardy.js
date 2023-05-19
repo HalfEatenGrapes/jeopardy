@@ -46,28 +46,31 @@ async function getCategoryIds() {
  *      ...
  *   ]
  */
-let answers = [];
-let questions = [];
+
+let wholeboard = {};
+categories = [];
 
 async function getCategory() {
   const catIds = await getCategoryIds();
   for (let cat of catIds) {
     const response = await fetch(`http://jservice.io/api/category?id=${cat}`);
     const data = await response.json();
-
     let category = data.title;
     categories.push(category);
-    for (let i = 0; i < 6; i++) {
+    wholeboard[category] = {};
+    for (let i = 0; i < data.clues.length; i++) {
       if (data.clues[i] === undefined) {
         continue;
       }
-      let question = data.clues[i].answer;
-      questions.push(question);
-      let answer = data.clues[i].question;
-      answers.push(answer);
+      let values = data.clues[i].value;
+      wholeboard[category][values] = {};
+      wholeboard[category][values].question = data.clues[i].answer;
+      wholeboard[category][values].answer = data.clues[i].question;
     }
   }
-  return categories;
+  // console.log(categories, "are categories");
+  // console.log(wholeboard, "is wholeboard");
+  return wholeboard;
 }
 
 /** Fill the HTML table#jeopardy with the categories & cells for questions.
@@ -87,11 +90,19 @@ const category = document.getElementsByClassName("cat");
 
 async function fillTable() {
   await getCategory();
+  console.log(wholeboard, "is wholeboard");
+  // console.log(categories, "are categories");
+  // console.log(wholeboard[categories[0]][200].question, "is question");
+  // console.log(wholeboard.category.value.answer, "is answer");
+  // console.log(wholeboard.category.value.value, "is value");
+
   for (let i = 0; i < categories.length; i++) {
     category[i].innerHTML = categories[i];
-  }
-  for (let i = 0; i < questions.length; i++) {
-    allQuestions[i].innerHTML = questions[i];
+    question2[i].innerHTML = wholeboard[categories[i]][200].question;
+    question4[i].innerHTML = wholeboard[categories[i]][400].question;
+    question6[i].innerHTML = wholeboard[categories[i]][600].question;
+    question8[i].innerHTML = wholeboard[categories[i]][800].question;
+    question10[i].innerHTML = wholeboard[categories[i]][1000].question;
   }
 }
 
