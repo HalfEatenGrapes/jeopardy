@@ -58,6 +58,9 @@ async function getCategory() {
     let category = data.title;
     categories.push(category);
     for (let i = 0; i < 6; i++) {
+      if (data.clues[i] === undefined) {
+        continue;
+      }
       let question = data.clues[i].answer;
       questions.push(question);
     //   let answer = data.clues[i].question;
