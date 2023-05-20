@@ -85,24 +85,23 @@ const question4 = document.getElementsByClassName("400");
 const question6 = document.getElementsByClassName("600");
 const question8 = document.getElementsByClassName("800");
 const question10 = document.getElementsByClassName("1000");
-const allQuestions = document.getElementsByClassName("question");
 const category = document.getElementsByClassName("cat");
 
 async function fillTable() {
   await getCategory();
   console.log(wholeboard, "is wholeboard");
-  // console.log(categories, "are categories");
-  // console.log(wholeboard[categories[0]][200].question, "is question");
-  // console.log(wholeboard.category.value.answer, "is answer");
-  // console.log(wholeboard.category.value.value, "is value");
-
   for (let i = 0; i < categories.length; i++) {
     category[i].innerHTML = categories[i];
     question2[i].innerHTML = wholeboard[categories[i]][200].question;
+    question2[i].classList.replace("available", "asked");
     question4[i].innerHTML = wholeboard[categories[i]][400].question;
+    question4[i].classList.replace("available", "asked");
     question6[i].innerHTML = wholeboard[categories[i]][600].question;
+    question6[i].classList.replace("available", "asked");
     question8[i].innerHTML = wholeboard[categories[i]][800].question;
+    question8[i].classList.replace("available", "asked");
     question10[i].innerHTML = wholeboard[categories[i]][1000].question;
+    question10[i].classList.replace("available", "asked");
   }
 }
 
@@ -119,13 +118,13 @@ board.addEventListener("click", handleClick);
  * */
 function handleClick(evt) {
   if (evt.target.classList.contains("available")) {
-    evt.target.innerText = question;
-  } else if (evt.target.classList.contains("question")) {
-    evt.target.innerText = answer;
-  } else if (evt.target.classList.contains("answer")) {
+    //   evt.target.innerText = question;
+    // } else if (evt.target.classList.contains("asked")) {
+    //   evt.target.innerText = answer;
+    // } else if (evt.target.classList.contains("answered")) {
     evt.target.classList.replace("available", "notavailable");
   }
-  console.log(evt.target.classList);
+  console.log(evt.target);
 }
 
 /** Wipe the current Jeopardy board, show the loading spinner,
