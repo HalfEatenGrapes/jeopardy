@@ -1,29 +1,45 @@
-// categories is the main data structure for the app; it looks like this:
-
-//  [
-//    { title: "Math",
-//      clues: [
-//        {question: "2+2", answer: 4, showing: null},
-//        {question: "1+1", answer: 2, showing: null}
-//        ...
-//      ],
-//    },
-//    { title: "Literature",
-//      clues: [
-//        {question: "Hamlet Author", answer: "Shakespeare", showing: null},
-//        {question: "Bell Jar Author", answer: "Plath", showing: null},
-//        ...
-//      ],
-//    },
-//    ...
-//  ]
 let categories = [];
+let wholeboard = {};
+
+const answeredQuestions = document.getElementsByClassName("question");
+const question2 = document.getElementsByClassName("200");
+const question4 = document.getElementsByClassName("400");
+const question6 = document.getElementsByClassName("600");
+const question8 = document.getElementsByClassName("800");
+const question10 = document.getElementsByClassName("1000");
+const category = document.getElementsByClassName("cat");
+
+const board = document.querySelector(".board");
+board.addEventListener("click", handleClick);
+
+const startButton = document.querySelector(".start");
+startButton.addEventListener("click", setupAndStart);
+
+/** On click of start / restart button, set up game. */
+async function setupAndStart() {
+  showLoadingView();
+  if (startButton.innerHTML === "Start!") {
+    await fillTable();
+    hideLoadingView();
+    startButton.innerHTML = "Restart";
+  } else {
+    wholeboard = {};
+    categories = [];
+    console.log(answeredQuestions);
+    for (changedquestion of answeredQuestions) {
+      if (changedquestion.classList.contains("notavailable")) {
+        changedquestion.classList.replace("notavailable", "available");
+      }
+    }
+    await fillTable();
+    hideLoadingView();
+  }
+}
 
 /** Get NUM_CATEGORIES random category from API.
  *
  * Returns array of category ids
  */
-
 async function getCategoryIds() {
   const catIds = [];
   for (let i = 0; i < 6; i++) {
@@ -36,20 +52,7 @@ async function getCategoryIds() {
 }
 
 /** Return object with data about a category:
- *
- *  Returns { title: "Math", clues: clue-array }
- *
- * Where clue-array is:
- *   [
- *      {question: "Hamlet Author", answer: "Shakespeare", showing: null},
- *      {question: "Bell Jar Author", answer: "Plath", showing: null},
- *      ...
- *   ]
  */
-
-let wholeboard = {};
-categories = [];
-
 async function getCategory() {
   const catIds = await getCategoryIds();
   for (let cat of catIds) {
@@ -72,23 +75,10 @@ async function getCategory() {
 }
 
 /** Fill the HTML table#jeopardy with the categories & cells for questions.
- *
- * - The <thead> should be filled w/a <tr>, and a <td> for each category
- * - The <tbody> should be filled w/NUM_QUESTIONS_PER_CAT <tr>s,
- *   each with a question for each category in a <td>
- *   (initally, just show a "?" where the question/answer would go.)
  */
-const question2 = document.getElementsByClassName("200");
-const question4 = document.getElementsByClassName("400");
-const question6 = document.getElementsByClassName("600");
-const question8 = document.getElementsByClassName("800");
-const question10 = document.getElementsByClassName("1000");
-const category = document.getElementsByClassName("cat");
-
 async function fillTable() {
   await getCategory();
   console.log(wholeboard, "is wholeboard");
-
   for (let i = 0; i < 6; i++) {
     category[i].innerHTML = categories[i];
     const keys = Object.keys(wholeboard[categories[i]]);
@@ -97,24 +87,6 @@ async function fillTable() {
     const q3Key = keys[2];
     const q4Key = keys[3];
     const q5Key = keys[4];
-
-    const q200 = wholeboard[categories[i]][q1Key].question;
-    const q400 = wholeboard[categories[i]][q2Key].question;
-    const q600 = wholeboard[categories[i]][q3Key].question;
-    const q800 = wholeboard[categories[i]][q4Key].question;
-    const q1000 = wholeboard[categories[i]][q5Key].question;
-
-    const a200 = wholeboard[categories[i]][q1Key].answer;
-    const a400 = wholeboard[categories[i]][q2Key].answer;
-    const a600 = wholeboard[categories[i]][q3Key].answer;
-    const a800 = wholeboard[categories[i]][q4Key].answer;
-    const a1000 = wholeboard[categories[i]][q5Key].answer;
-
-    question2[i].addEventListener("click", handleClick);
-    question4[i].addEventListener("click", handleClick);
-    question6[i].addEventListener("click", handleClick);
-    question8[i].addEventListener("click", handleClick);
-    question10[i].addEventListener("click", handleClick);
 
     question2[i].dataset.category = categories[i];
     question2[i].dataset.value = parseInt(q1Key);
@@ -133,62 +105,39 @@ async function fillTable() {
   }
 }
 
-const board = document.querySelector(".board");
-
-board.addEventListener("click", handleClick);
-
+let asked = false;
+let answered = false;
 /** Handle clicking on a clue: show the question or answer.
- *
- * Uses .showing property on clue to determine what to show:
- * - if currently null, show question & set .showing to "question"
- * - if currently "question", show answer & set .showing to "answer"
- * - if currently "answer", ignore click
  * */
 function handleClick(evt) {
   const category = evt.target.dataset.category;
   const value = parseInt(evt.target.dataset.value);
   const question = wholeboard[category][value].question;
   const answer = wholeboard[category][value].answer;
-
-  if (evt.target.classList.contains("available")) {
+  if (!answered && !asked) {
     evt.target.innerHTML = answer;
-    evt.target.classList.replace("available", "answer");
-    return;
-  } else if (evt.target.classList.contains("answer")) {
+    asked = true;
+  } else if (asked && !answered) {
     evt.target.innerHTML = question;
-    evt.target.classList.replace("answer", "question");
-    return;
-  } else if (evt.target.classList.contains("question")) {
-    evt.target.classList.replace("question", "notavailable");
-    // make innertext = value
-    evt.target.innerText = evt.target.classList[0];
+    answered = true;
+  } else if (asked && answered) {
+    // make innerHTML the class name
+    evt.target.innerHTML = evt.target.classList[0];
+    evt.target.classList.replace("available", "notavailable");
+    asked = false;
+    answered = false;
+    evt.target.removeEventListener("click", handleClick);
   }
-  console.log(evt.target.classList, evt.target.innerText);
 }
 
-/** Wipe the current Jeopardy board, show the loading spinner,
- * and update the button used to fetch data.
- */
+/** show the loading spinner  */
+function showLoadingView() {
+  document.querySelector("body").style.cursor = "progress";
+  document.querySelector(".start").style.cursor = "progress";
+}
 
-function showLoadingView() {}
-
-/** Remove the loading spinner and update the button used to fetch data. */
-
-function hideLoadingView() {}
-
-/** Start game:
- *
- * - get random category Ids
- * - get data for each category
- * - create HTML table
- * */
-
-async function setupAndStart() {}
-
-/** On click of start / restart button, set up game. */
-
-// TODO
-
-/** On page load, add event handler for clicking clues */
-
-// TODO
+/** Remove the loading spinner. */
+function hideLoadingView() {
+  document.querySelector("body").style.cursor = "pointer";
+  document.querySelector(".start").style.cursor = "pointer";
+}
