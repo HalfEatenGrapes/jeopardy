@@ -91,18 +91,33 @@ const category = document.getElementsByClassName("cat");
 async function fillTable() {
   await getCategory();
   console.log(wholeboard, "is wholeboard");
-  // console.log(categories, "are categories");
-  // console.log(wholeboard[categories[0]][200].question, "is question");
-  // console.log(wholeboard.category.value.answer, "is answer");
-  // console.log(wholeboard.category.value.value, "is value");
 
-  for (let i = 0; i < categories.length; i++) {
+  for (let i = 0; i < 6; i++) {
     category[i].innerHTML = categories[i];
-    question2[i].innerHTML = wholeboard[categories[i]][200].question;
-    question4[i].innerHTML = wholeboard[categories[i]][400].question;
-    question6[i].innerHTML = wholeboard[categories[i]][600].question;
-    question8[i].innerHTML = wholeboard[categories[i]][800].question;
-    question10[i].innerHTML = wholeboard[categories[i]][1000].question;
+    const keys = Object.keys(wholeboard[categories[i]]);
+    const q1Key = keys[0];
+    const q2Key = keys[1];
+    const q3Key = keys[2];
+    const q4Key = keys[3];
+    const q5Key = keys[4];
+
+    const q200 = wholeboard[categories[i]][q1Key].question;
+    const q400 = wholeboard[categories[i]][q2Key].question;
+    const q600 = wholeboard[categories[i]][q3Key].question;
+    const q800 = wholeboard[categories[i]][q4Key].question;
+    const q1000 = wholeboard[categories[i]][q5Key].question;
+
+    const a200 = wholeboard[categories[i]][q1Key].answer;
+    const a400 = wholeboard[categories[i]][q2Key].answer;
+    const a600 = wholeboard[categories[i]][q3Key].answer;
+    const a800 = wholeboard[categories[i]][q4Key].answer;
+    const a1000 = wholeboard[categories[i]][q5Key].answer;
+
+    question2[i].innerHTML = a200;
+    question4[i].innerHTML = a400;
+    question6[i].innerHTML = a600;
+    question8[i].innerHTML = a800;
+    question10[i].innerHTML = a1000;
   }
 }
 
@@ -119,13 +134,17 @@ board.addEventListener("click", handleClick);
  * */
 function handleClick(evt) {
   if (evt.target.classList.contains("available")) {
-    evt.target.innerText = question;
+    evt.target.innerText = "question";
+    evt.target.classList.replace("available", "question");
   } else if (evt.target.classList.contains("question")) {
-    evt.target.innerText = answer;
+    evt.target.innerText = "answer";
+    evt.target.classList.replace("question", "answer");
   } else if (evt.target.classList.contains("answer")) {
-    evt.target.classList.replace("available", "notavailable");
+    evt.target.classList.replace("answer", "notavailable");
+    // make innertext = value
+    evt.target.innerText = evt.target.classList[0];
   }
-  console.log(evt.target.classList);
+  console.log(evt.target.classList, evt.target.innerText);
 }
 
 /** Wipe the current Jeopardy board, show the loading spinner,
