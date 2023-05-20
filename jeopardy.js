@@ -43,7 +43,7 @@ async function setupAndStart() {
 async function getCategoryIds() {
   const catIds = [];
   for (let i = 0; i < 6; i++) {
-    const response = await fetch("http://jservice.io/api/random");
+    const response = await fetch("https://jservice.io/api/random");
     const data = await response.json();
     let catId = data[0].category.id;
     catIds.push(catId);
@@ -56,7 +56,7 @@ async function getCategoryIds() {
 async function getCategory() {
   const catIds = await getCategoryIds();
   for (let cat of catIds) {
-    const response = await fetch(`http://jservice.io/api/category?id=${cat}`);
+    const response = await fetch(`https://jservice.io/api/category?id=${cat}`);
     const data = await response.json();
     let category = data.title;
     categories.push(category);
