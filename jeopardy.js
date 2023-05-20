@@ -68,8 +68,6 @@ async function getCategory() {
       wholeboard[category][values].answer = data.clues[i].question;
     }
   }
-  // console.log(categories, "are categories");
-  // console.log(wholeboard, "is wholeboard");
   return wholeboard;
 }
 
@@ -113,11 +111,26 @@ async function fillTable() {
     const a800 = wholeboard[categories[i]][q4Key].answer;
     const a1000 = wholeboard[categories[i]][q5Key].answer;
 
-    question2[i].innerHTML = a200;
-    question4[i].innerHTML = a400;
-    question6[i].innerHTML = a600;
-    question8[i].innerHTML = a800;
-    question10[i].innerHTML = a1000;
+    question2[i].addEventListener("click", handleClick);
+    question4[i].addEventListener("click", handleClick);
+    question6[i].addEventListener("click", handleClick);
+    question8[i].addEventListener("click", handleClick);
+    question10[i].addEventListener("click", handleClick);
+
+    question2[i].dataset.category = categories[i];
+    question2[i].dataset.value = parseInt(q1Key);
+
+    question4[i].dataset.category = categories[i];
+    question4[i].dataset.value = parseInt(q2Key);
+
+    question6[i].dataset.category = categories[i];
+    question6[i].dataset.value = parseInt(q3Key);
+
+    question8[i].dataset.category = categories[i];
+    question8[i].dataset.value = parseInt(q4Key);
+
+    question10[i].dataset.category = categories[i];
+    question10[i].dataset.value = parseInt(q5Key);
   }
 }
 
@@ -133,14 +146,21 @@ board.addEventListener("click", handleClick);
  * - if currently "answer", ignore click
  * */
 function handleClick(evt) {
+  const category = evt.target.dataset.category;
+  const value = parseInt(evt.target.dataset.value);
+  const question = wholeboard[category][value].question;
+  const answer = wholeboard[category][value].answer;
+
   if (evt.target.classList.contains("available")) {
-    evt.target.innerText = "question";
-    evt.target.classList.replace("available", "question");
-  } else if (evt.target.classList.contains("question")) {
-    evt.target.innerText = "answer";
-    evt.target.classList.replace("question", "answer");
+    evt.target.innerHTML = answer;
+    evt.target.classList.replace("available", "answer");
+    return;
   } else if (evt.target.classList.contains("answer")) {
-    evt.target.classList.replace("answer", "notavailable");
+    evt.target.innerHTML = question;
+    evt.target.classList.replace("answer", "question");
+    return;
+  } else if (evt.target.classList.contains("question")) {
+    evt.target.classList.replace("question", "notavailable");
     // make innertext = value
     evt.target.innerText = evt.target.classList[0];
   }
