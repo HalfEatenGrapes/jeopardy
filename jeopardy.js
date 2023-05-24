@@ -83,7 +83,6 @@ const question4 = document.getElementsByClassName("400");
 const question6 = document.getElementsByClassName("600");
 const question8 = document.getElementsByClassName("800");
 const question10 = document.getElementsByClassName("1000");
-const allQuestions = document.getElementsByClassName("question");
 const category = document.getElementsByClassName("cat");
 
 async function fillTable() {
